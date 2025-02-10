@@ -9,7 +9,7 @@ namespace Tridy_procvicovani
     internal class Program
     {
         static void Main(string[] args)
-        {
+        {   
             Console.WriteLine("Zadejte jméno studenta:");
             Student s1 = new Student(Console.ReadLine());
             Student s2 = new Student("Petr");
@@ -20,7 +20,7 @@ namespace Tridy_procvicovani
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    s1.Znamky.Add(Convert.ToInt32(Console.ReadLine()));
+                    s1.PridejZnamku(Convert.ToInt32(Console.ReadLine()));
                 }
             }
             catch (Exception e)
@@ -42,18 +42,23 @@ namespace Tridy_procvicovani
 
             Console.ReadKey();
             // TODO:
+            // - (studenti se bodou pridavat ve while cykl v mainu)
+            // - opravte konrolu průměru pro situaci, kdy nejsou zadány žádné známky
+            // - kontrola počtu studentů bude vlastní metoda
             // - přidání známky přepište na vlastní metodu (v rámci třídy)
             // - přidejte metodu, která zobrazuje jména všech studentů
             // - přidejte metodu, která bude známky upravovat (mazat, editovat, ... )
-
+            // - zobrazení průměru všech studentů
         }
     }
     public class Student
     {
+        //atributy
         public string Jmeno;
         public List<int> Znamky;
         public static int seznamStudentu = 0;
         private static List<Student> studenti = new List<Student>();
+        //Konstruktor
         public Student(string jmeno)
         {
             Jmeno = jmeno;
@@ -79,12 +84,25 @@ namespace Tridy_procvicovani
         }
         public double PrumernaZnamka()
         {
-            return Znamky.Count > 0 ? Znamky.Average() : 0;
+            if (Znamky.Count > 0)
+            {
+                return Znamky.Average();
+            }
+            else
+            {
+                return 0;
+            }
         }
         public void KontrolaPrumeru()
         {
             try
             {
+                if (Znamky.Count == 0)
+                {
+                    Console.WriteLine("Student nemá žádné známky.");
+                    return;
+                }
+
                 double prumer = PrumernaZnamka();
                 if (prumer < 1.5)
                 {
