@@ -10,43 +10,78 @@ namespace Tridy_procvicovani
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Zadejte jméno studenta:");
-            Student s1 = new Student(Console.ReadLine());
-            Student s2 = new Student("Petr");
-            Student s3 = new Student("Jana");
+            List<Student> studenti = new List<Student>();  // Seznam studentů
 
-            Console.WriteLine("Zadejte 5 známek");
-            try
+            // Přidání studentů pomocí while cyklu
+            while (true)
             {
-                for (int i = 0; i < 5; i++)
+                Console.WriteLine("Zadejte jméno studenta (nebo stiskněte Enter pro ukončení):");
+                string jmeno = Console.ReadLine();
+                if (string.IsNullOrEmpty(jmeno)) break;  // Ukončení cyklu, pokud je vstup prázdný
+
+                Student novyStudent = new Student(jmeno);
+                studenti.Add(novyStudent);  // Přidání studenta do seznamu
+            }
+
+            // Pro každý student kontrolujeme průměr a přidáváme známky
+            foreach (var student in studenti)
+            {
+                Console.WriteLine($"\nZadejte 5 známek pro studenta {student.Jmeno}:");
+                try
                 {
-                    s1.Znamky.Add(Convert.ToInt32(Console.ReadLine()));
+                    for (int i = 0; i < 5; i++)
+                    {
+                        student.Znamky.Add(Convert.ToInt32(Console.ReadLine()));
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("neco se pokazilo");
+                catch (Exception e)
+                {
+                    Console.WriteLine("Něco se pokazilo při zadávání známek.");
+                }
+
+                // Kontrola průměru pro každého studenta
+                student.KontrolaPrumeru();
             }
 
-            s1.KontrolaPrumeru();
-            Console.WriteLine("Počet studentů: " + Student.seznamStudentu);
+            Console.WriteLine("\nPočet studentů: " + studenti.Count);
 
+            // Zobrazíme seznam všech studentů
             Console.WriteLine("\nSeznam všech studentů:");
-            s1.ZobrazInfo();
+            foreach (var student in studenti)
+            {
+                student.ZobrazInfo();
+            }
 
-            Console.WriteLine("\nUpravíme známky studenta " + s1.Jmeno);
-            s1.UpravZnamku();
+            // Umožníme upravit známky pro konkrétního studenta
+            Console.WriteLine("\nZadejte jméno studenta, pro kterého chcete upravit známky:");
+            string upravitJmeno = Console.ReadLine();
 
-            Console.WriteLine("\nAktualizované známky:");
-            s1.ZobrazInfo();
+            var studentUpravit = studenti.FirstOrDefault(s => s.Jmeno.Equals(upravitJmeno, StringComparison.OrdinalIgnoreCase));
+
+            if (studentUpravit != null)
+            {
+                Console.WriteLine($"\nUpravíme známky studenta {studentUpravit.Jmeno}:");
+                studentUpravit.UpravZnamku();
+
+                Console.WriteLine("\nAktualizované známky:");
+                studentUpravit.ZobrazInfo();
+            }
+            else
+            {
+                Console.WriteLine("Student s tímto jménem nebyl nalezen.");
+            }
 
             Console.ReadKey();
-            // TODO:
-            // - přidání známky přepište na vlastní metodu (v rámci třídy)
-            // - přidejte metodu, která zobrazuje jména všech studentů
-            // - přidejte metodu, která bude známky upravovat (mazat, editovat, ... )
-
         }
+
+        /// TODO:
+        // - (studenti se bodou pridavat ve while cykl v mainu)
+        // - opravte konrolu průměru pro situaci, kdy nejsou zadány žádné známky
+        // - kontrola počtu studentů bude vlastní metoda
+        // - přidání známky přepište na vlastní metodu (v rámci třídy)
+        // - přidejte metodu, která zobrazuje jména všech studentů
+        // - přidejte metodu, která bude známky upravovat (mazat, editovat, ... )
+        // - zobrazení průměru všech studentů
     }
     public class Student
     {
