@@ -85,10 +85,12 @@ namespace Tridy_procvicovani
     }
     public class Student
     {
+        //atributy
         public string Jmeno;
         public List<int> Znamky;
         public static int seznamStudentu = 0;
         private static List<Student> studenti = new List<Student>();
+        //Konstruktor
         public Student(string jmeno)
         {
             Jmeno = jmeno;
@@ -114,12 +116,25 @@ namespace Tridy_procvicovani
         }
         public double PrumernaZnamka()
         {
-            return Znamky.Count > 0 ? Znamky.Average() : 0;
+            if (Znamky.Count > 0)
+            {
+                return Znamky.Average();
+            }
+            else
+            {
+                return 0;
+            }
         }
         public void KontrolaPrumeru()
         {
             try
             {
+                if (Znamky.Count == 0)
+                {
+                    Console.WriteLine("Student nemá žádné známky.");
+                    return;
+                }
+
                 double prumer = PrumernaZnamka();
                 if (prumer < 1.5)
                 {
